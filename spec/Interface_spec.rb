@@ -40,18 +40,12 @@ RSpec.describe Interface do
     end
 
     context "when no items are removed from order" do
-      before(:example) do
-        allow(@order).to receive(:basket).and_return(
-            {"cheeseburger" => 2, "fries" => 1, "milkshake"=> 2}
-        )
-      end
-
       it "returns order summary" do
         expect( @interface.order_summary ).to eq "Order summary:\n2 x cheeseburger @ £9.50\n1 x fries @ £3.50\n2 x milkshake @ £5.00\nTotal: £32.50\n"
       end
 
       it "confirms order, generates SMS confirmation, and returns itemised receipt" do
-        Timecop.freeze(Time.local(2022, 6, 24)) do
+        Timecop.freeze(Time.local(2022, 6, 29)) do
           expect(@messenger).to receive(:send_notification).with("Thanks for your order! Estimated delivery time: 12:30 am").and_return("Thanks for your order! Estimated delivery time: 12:30 am")
           expect( @interface.confirm_order ).to eq "Order confirmation:\n2 x cheeseburger @ £9.50\n1 x fries @ £3.50\n2 x milkshake @ £5.00\nTotal: £32.50\n"
         end
@@ -108,11 +102,11 @@ RSpec.describe Interface do
       @interface = Interface.new(menu, order, messenger)
     end
 
-    it "returns an error when calling #order_summary on empty order" do
+    it "returns an error when calling #order_summary" do
       expect{ @interface.order_summary }.to raise_error "Order not found."
     end
 
-    it "returns an error when calling #confirm_order on empty order" do
+    it "returns an error when calling #confirm_order" do
       expect{ @interface.confirm_order }.to raise_error "Order not found."
     end
   end

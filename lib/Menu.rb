@@ -12,12 +12,8 @@ class Menu
   end
 
   def item_price(item)
-    @menu.each do |x|
-      if x.name == item
-        return x.price
-      end 
-    end
-    return nil
+    return nil unless @menu.one? { |x| x.name == item }
+    @menu.each { |y| return y.price if y.name == item }
   end
 
   private

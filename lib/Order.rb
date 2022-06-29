@@ -5,17 +5,12 @@ class Order
 
   def update_basket(item, quantity = 1)
     @basket[item] += quantity
+    if @basket[item] == 0
+      @basket.delete(item)
+    end
   end
 
-  def basket_summary
-    return format_summary
-  end
-
-  private
-
-  def format_summary
-    array = []
-    @basket.each { |key, value| array << {:item => key, :quantity => value} }
-    return array
+  def basket
+    return @basket
   end
 end
